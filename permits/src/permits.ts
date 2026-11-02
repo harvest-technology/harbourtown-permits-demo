@@ -29,6 +29,13 @@ export function addMonths(day: string, months: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+/** The day `days` days after `day`, as an ISO day. */
+export function addDays(day: string, days: number): string {
+  const date = new Date(`${day}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
 /** Whether the permit lets its plate park on `day`. */
 export const isValid = (permit: Permit, day: string): boolean =>
   permit.paid && permit.start <= day && day < permit.end;
@@ -56,8 +63,8 @@ export class PermitBook {
         isValid(permit, today),
     );
     if (current) {
-      // A renewal starts when the current permit ends, so no paid month is lost.
-      return this.issue({ ...request, start: current.end }, current.price);
+      // A renewal starts today, like a new permit.
+      return this.issue({ ...request, start: today }, current.price);
     }
 
     const atAddress = this.permits.filter(
@@ -79,14 +86,33 @@ export class PermitBook {
     permit.paid = true;
   }
 
-  /** Moves a permit to another vehicle. Not built yet: see specs/. */
+  /** Moves a valid permit to another vehicle. The permit keeps its end date and stays paid. */
   move(
     permitId: number,
     plate: string,
     resident: string,
     today: string,
   ): Result {
-    return { ok: false, reason: 'Moving a permit is not built yet.' };
+    const permit = this.permits.find((candidate) => candidate.id === permitId);
+    if (!permit) return { ok: false, reason: 'No such permit.' };
+    if (permit.holder !== resident)
+      return { ok: false, reason: 'Only the holder can move a permit.' };
+    if (!isValid(permit, today))
+      return { ok: false, reason: 'Only a valid permit can be moved.' };
+
+    const end = permit.end;
+    const tomorrow = addDays(today, 1);
+    // The old plate may park until the end of today, so the resident can swap cars.
+    permit.end = tomorrow;
+    const moved: Permit = {
+      ...permit,
+      id: this.permits.length + 1,
+      plate,
+      start: tomorrow,
+      end,
+    };
+    this.permits.push(moved);
+    return { ok: true, permit: moved };
   }
 
   /** Whether any permit lets the plate park on `day`. */

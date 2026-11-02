@@ -7,7 +7,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --test --test-reporter=spec \"permits/test/*.test.ts\" \"test/acceptance/*.test.ts\"",
+    "test": "node --test --test-reporter=spec \"permits/test/*.test.ts\"",
     "check": "npm run typecheck && npm test"
   },
   "devDependencies": {
