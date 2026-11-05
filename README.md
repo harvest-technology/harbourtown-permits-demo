@@ -1,35 +1,28 @@
-# Harbourtown parking permits
+# Prepared Harbourtown review case
 
-The parking-permit service of Harbourtown, a fictional municipality. Residents
-request a permit for their own vehicle; it is valid for 12 months once paid. An
-address has at most two permits, and the second costs more.
+This branch has a completed human-owned spec, decision rights and acceptance
+examples. It is not the blank participant starter.
 
-For the capstone, fill the [move-permit draft](specs/move-permit.md). The
-[spec guide](specs/README.md) includes the fixture data, API and a test to copy
-and adapt to your own acceptance criterion.
+## Review the prepared change
 
-## Work in the browser
+- `main`: the learner's fill-in starter.
+- `review/move-permit`: the agreed inputs, before implementation.
+- `agent/move-permit`: the prepared agent implementation on those inputs.
 
-Nothing needs to be installed.
+Compare `review/move-permit` with `agent/move-permit` in a pull request or with
+`git diff review/move-permit...agent/move-permit`. Read
+`specs/move-permit.md`, `AGENTS.md`, `test/acceptance/move.test.ts` and
+`RELEASES.md`, not just the agent's commit description.
 
-- **Read and edit:** on the repository page, press `.` to open it in
-  github.dev, or open it in vscode.dev. Commit from there.
-- **The agent:** a cloud coding agent works on the repository and opens a pull
-  request. It runs the checks in its own environment.
-- **The checks:** GitHub Actions runs two checks on every pull request and on
-  `main`. "npm run check" runs the typecheck and the tests in the test
-  script. "Acceptance examples" always runs `test/acceptance/`.
+## Run the evidence
 
-## Where things are
+```sh
+npm ci
+npm run check
+node --test "test/acceptance/*.test.ts"
+```
 
-| Path                           | Contents                                                   |
-| ------------------------------ | ---------------------------------------------------------- |
-| `permits/src/`                 | The service and the two registers, with invented data      |
-| `permits/test/`                | The developers' tests                                      |
-| `test/acceptance/`             | The product owner's examples: what "correct" means         |
-| `specs/`                       | One spec per change, for the agent                         |
-| `AGENTS.md`                    | Instructions every coding agent reads, and decision rights |
-| `RELEASES.md`                  | Release notes, with who approved each change               |
-| `.github/workflows/checks.yml` | The two checks                                             |
-
-`CLAUDE.md` points to `AGENTS.md`, so agents that read either file get the same instructions.
+On the review baseline, move examples fail because the feature is not built.
+On the prepared agent branch, compare the ordinary check with the independent
+acceptance command. A failing example is evidence to review, not an instruction
+to weaken it. The draft release note has not been approved by a person.

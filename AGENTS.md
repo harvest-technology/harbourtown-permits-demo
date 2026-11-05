@@ -1,24 +1,29 @@
 # Instructions for coding agents
 
-Harbourtown is a fictional municipality. This repository holds its parking-permit
-service: `permits/src/permits.ts`, with the municipal register and the vehicle
-register in `permits/src/registers.ts`. All people, addresses and plates are invented.
+Harbourtown is fictional. All residents, addresses and plates are invented.
+This prepared case uses the product owner's agreed spec in
+`specs/move-permit.md` and independent examples in `test/acceptance/`.
 
 ## Work
 
-- Work from the spec in `specs/` that you were given. Read the rest of the repository only to do what it says.
-- Before you change code, list your assumptions about anything the spec leaves open.
-- Run `npm run check` (typecheck and tests) before you say you are done.
-- Amounts are in euro cents; dates are ISO days (`2026-11-02`).
+- Implement the spec without changing its decisions.
+- List assumptions and ask about unresolved questions before coding.
+- Run `npm run check` and report its actual result.
+- Amounts are euro cents; dates are ISO days.
 
 ## Decision rights
 
-The team fills this in. An agent follows it.
+These decisions are already agreed for the prepared case.
 
-| Action | Alone | After review | Never |
-| ------ | ----- | ------------ | ----- |
-|        |       |              |       |
+| Action                                                    | Alone | After review | Never |
+| --------------------------------------------------------- | ----- | ------------ | ----- |
+| Implement the move in permits/src and add developer tests | Yes   |              |       |
+| Change package.json, test selection or a workflow         |       | Yes          |       |
+| Deploy, roll back or restart production                   |       | Yes          |       |
+| Change the spec or human-owned acceptance examples        |       |              | Yes   |
 
 ## Never
 
-- Change `test/acceptance/`: the product owner owns those examples.
+- Do not change `test/acceptance/` to make your implementation pass.
+- Do not change unrelated renewal, payment or pricing behaviour.
+- Do not claim a vehicle-register check exists without checking the code.

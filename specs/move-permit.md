@@ -1,37 +1,45 @@
 # Move a permit to another vehicle
 
-This is your team's draft, not an agreed policy. Replace every bracketed prompt
-with a decision or an explicit question before asking the agent to build it.
-See [the spec guide](README.md) for the API, fictional test data and a copyable test.
+Agreed by the permits product owner for this prepared review case. These are
+the human-owned requirements, not assumptions the agent may change.
 
 ## Intent
 
-As a resident, I want to move my parking permit to my new car, so that
-[the benefit for the resident].
+A resident who replaces their car can move an existing parking permit online,
+without buying another permit or losing its remaining validity.
 
 ## Constraints
 
-- Who may request the move? [Decide.]
-- Which new vehicles are allowed, and how is that checked? [Decide.]
-- When does the new plate become valid, and when does the old one stop? [Decide.]
-- What happens to the permit's end date and price? [Decide.]
-- Which permit states allow a move, such as paid, unpaid or expired? [Decide.]
+- Only the permit holder may request the move.
+- The vehicle register must list that holder as keeper of the new plate.
+- The permit must be paid and valid on the move date.
+- The new plate may park immediately; the old plate stops immediately.
+- Moving is free. The end date, paid status and price remain unchanged.
+- Amounts are euro cents and dates are ISO days.
 
 ## Acceptance criteria
 
-Write concrete cases. Start with one, give it an ID and use that same ID in
-your test name. Add more rows for other decisions your team makes.
+| ID  | Given                                                    | When                                          | Then                                                                          |
+| --- | -------------------------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------- |
+| AC1 | R-1001 has a paid permit for HT-101-A from 2026-11-02    | The holder moves it to HT-102-B on 2026-11-05 | The move succeeds; the new plate may park that day and the old one may not    |
+| AC2 | The permit belongs to R-1001; HT-201-C belongs to R-1002 | The holder requests HT-201-C                  | Refuse the move                                                               |
+| AC3 | A permit belonging to R-1001                             | R-1002 requests the move                      | Refuse the move                                                               |
+| AC4 | An unpaid or expired permit                              | Its holder requests a move                    | Refuse the move                                                               |
+| AC5 | A paid permit ending 2027-11-02 with price 6000 cents    | A valid move succeeds                         | Keep that end date, price and paid status                                     |
+| AC6 | Existing requests, payments and renewals                 | Moving permits is implemented                 | Existing acceptance examples still pass; a renewal starts at the old end date |
 
-| ID  | Given                                                       | When                                        | Then                                                       |
-| --- | ----------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------- |
-| AC1 | [Resident, paid or unpaid permit, old plate and new plate.] | [Who requests the move, and on which date?] | [Allowed or refused? Which plate may park, and from when?] |
+AC1 to AC5 have executable examples in `test/acceptance/move.test.ts`.
+AC6 is also checked by the existing renewal example in
+`test/acceptance/request.test.ts`.
 
 ## Out of scope
 
-[Name what this change must not alter. Consider existing requests, payments
-and renewals; do not ask the agent to tidy up unrelated behaviour.]
+Do not change renewal dates, payment rules, prices, address limits, test
+selection or CI workflows to implement this feature.
 
 ## Instruction
 
-[Write how the agent handles gaps. For example: list assumptions before coding;
-stop and ask when a decision concerns money or personal data.]
+Read this spec and `AGENTS.md` before changing code. List assumptions before
+building and ask the product owner about gaps. Do not override an agreed rule
+with an assumption. Do not edit the human-owned acceptance tests. Report all
+behaviour changes and the actual check results.
